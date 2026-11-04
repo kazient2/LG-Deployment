@@ -1,0 +1,988 @@
+version: "3"
+services:
+
+  faclonserver:
+    image: ${FSV_IMAGE}
+    container_name: fsv
+    network_mode: host
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes:
+      - ${HOST_REPORT_PATH}:${REPORT_FOLDER}
+      - ./fsv:/home/node/.aws/credentials
+    environment:
+      -  NODE_ENV=${NODE_ENV}  
+      -  PORT=${FSV_PORT}
+      -  TZ=Etc/UTC
+      -  IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+      - ./fsv:/home/node/.aws/credentials
+
+      -  DB_URI=${DB_URI}
+
+      -  REDIS_HOST=${REDIS_HOST}
+      -  REDIS_PORT=${REDIS_PORT}
+      -  REDIS_DB=3
+
+      -  CRYPTOKEY=${CRYPTOKEY}
+      -  APPVERSION=1.0.2
+      -  FORIP=50
+      -  FORIPANDUSER=7
+      -  LOGEXPIRATION=20m
+
+      - SESSION_EXPIRY_IN_SECS=${SESSION_EXPIRY_IN_SECS}
+      - SESSION_EXPIRY_REQUIRED=${SESSION_EXPIRY_REQUIRED}
+
+      - ADMINPANEL_HOST=${ADMIN_HOST}
+      - ADMINPANEL_PORT=${ADMIN_PORT}
+
+      - NOTIFENGINE_HOST=${NOTIFENGINE_HOST}
+      - NOTIFENGINE_PORT=${NOTIFENGINE_PORT}
+
+      - IOSCHEDULER_HOST=${IOSCHEDULER_HOST}
+      - IOSCHEDULER_PORT=${IOSCHEDULER_PORT}
+
+
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      - APILAYER_METHOD=GET
+
+    
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID=APPSERVER
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=2
+
+      - QUOTAENGINE_HOST=${QUOTAENGINE_HOST}
+      - QUOTAENGINE_PORT=${QUOTAENGINE_PORT}
+
+      - RGS_HOST=${RGS_HOST}
+      - RGS_PORT=${RGS_PORT}
+      - RGS_METHOD=PUT
+      - RGS_PATH=/api/account/report/generate
+
+      - S3BUCKET=${S3BUCKET}
+      - DEVOPSBUCKETNAME=${DEVOPSBUCKETNAME}
+      - BACKENDASSETSBUCKETNAME=${BACKENDASSETSBUCKETNAME}
+
+
+      - MAILATTACHMENTDIR=./../mailAttachments
+      - WEBSITEDOCS=${WEBSITEDOCS}
+
+      - NOTIFICATION_HOST=${NOTIFICATION_HOST}
+      - NOTIFICATION_PORT=${NOTIFICATION_PORT}
+
+      - PYAPP_HOST=${PYAPP_HOST}
+      - PYAPP_PORT=${PYAPP_PORT}
+
+      - DATA_SERVER_HOST=${DATA_SERVER_HOST}
+      - DATA_SERVER_PORT=${DATA_SERVER_PORT}
+      - LOCAL_REPORTS_HOST=${LOCAL_REPORTS_HOST}
+      - LOCAL_REPORTS_PORT=${LOCAL_REPORTS_PORT}
+      - LOCAL_REPORTS=${LOCAL_REPORTS}
+      - LOCAL_REPORTS_IS_SSL=${LOCAL_REPORTS_IS_SSL}
+      - LOCAL_FILE_STORAGE_PATH=${LOCAL_FILE_STORAGE_PATH}
+
+      - REPORT_FOLDER=${REPORT_FOLDER}
+
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE=microservices_test
+      - RMQ_SUFFIX=.test
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+      - MINIOURL=${MINIOURL}
+      - MINIOPROFILE=${MINIOPROFILE}
+      - MINIOREGION=${MINIOREGION}
+      - MINIOSIGNATUREVERSION=${MINIOSIGNATUREVERSION}
+      - S3FORCEPATHSTYLE=${S3FORCEPATHSTYLE}
+      - STORAGE_PROVIDER=${STORAGE_PROVIDER}
+      - STORAGEPROXY_URL=${STORAGEPROXY_URL}
+      - IS_STORAGEPROXY=${IS_STORAGEPROXY}
+      - AWS
+      - REPORT_BUCKET=${REPORT_BUCKET}
+      - AWSS3PROFILE=${AWSS3PROFILE}
+      - AWSS3REGION=${AWSS3REGION}
+      
+      - HERE_KEY=${HERE_KEY}
+      - HERE_SECRET=${HERE_SECRET}
+      - CRYPTO_SECRET_KEY=${CRYPTO_SECRET_KEY}
+
+      - LOAD_DYNAMIC_SCHEMA=${LOAD_DYNAMIC_SCHEMA}
+
+      - HOSTNAME=${HOSTNAME}
+      - DOD_SCHEDULER_HOST=${DOD_SCHEDULER_HOST}
+      - DOD_SCHEDULER_PORT=${DOD_SCHEDULER_PORT}
+      - IO_FORM_TOKEN_AES_KEY=${IO_FORM_TOKEN_AES_KEY}
+
+      - BRUCE_HOST=${BRUCE_HOST}
+      - BRUCE_PORT=${BRUCE_PORT}
+      - AI_SDK_HOST=${THIRD_PARTY_SERVER_HOST}
+      - AI_SDK_PORT=${THIRD_PARTY_SERVER_PORT}
+
+      - MFA_MAX_RETRIES=5
+      - MFA_COOLDOWN=1h
+      - MFA_MAX_OTP=5
+      - MFA_HOST=localhost
+      - MFA_PORT=3069
+
+  admin:
+    image: ${ADMIN_IMAGE}
+    container_name: admin
+    network_mode: host
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${ADMIN_PORT}
+      - TZ=Etc/UTC
+      - FSV_HOST=${FSV_HOST}
+      - FSV_PORT=${FSV_PORT}
+
+      - DB_URI=${DB_URI2}
+      - DB_URL_EMQX=${DB_URL_EMQX}
+
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=3
+        
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      - APILAYER_METHOD='GET'
+        
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID='admin_server_local'
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=2
+        
+      - NOTIFENGINE_HOST=${NOTIFENGINE_HOST}
+      - NOTIFENGINE_PORT=${NOTIFENGINE_PORT}
+
+      -  FORIP=50
+      -  FORIPANDUSER=7
+      -  LOGEXPIRATION=20m
+        
+      - STARTRECORDTYPE='A'
+      - MAXITEMS='1'
+      - HOSTEDZONEID=${HOSTEDZONEID}
+        
+      - RESOURCESRECORDSETSVALUE=${RESOURCESRECORDSETSVALUE}
+      - RESOURCESRECORDSETSTTL=60
+      - RESOURCESRECORDSETSTYPE='A'
+        
+      - MINIOURL=${MINIOURL}
+      - MINIOPROFILE=${MINIOPROFILE}
+      - MINIOREGION=${MINIOREGION}
+      - USEMINIO=${USEMINIO}
+      - MINIOSIGNATUREVERSION=${MINIOSIGNATUREVERSION}
+      - S3FORCEPATHSTYLE=${S3FORCEPATHSTYLE}
+      
+      - AWS
+      - REPORT_BUCKET=${REPORT_BUCKET}
+      - AWSS3PROFILE=${AWSS3PROFILE}
+      - AWSS3REGION=${AWSS3REGION}
+      
+      - BUCKETNAME=${ADMIN_BUCKETNAME}
+      - DEVOPSBUCKETNAME=${DEVOPSBUCKETNAME}
+      - BACKENDASSETSBUCKETNAME='faclon-backend-assets'
+        
+      - CRYPTOKEY=${CRYPTOKEY}
+        
+      - REPLICASET=rs0
+      - VERSION=1.0.0
+        
+      - NOTIFICATION_HOST=${NOTIFICATION_HOST}
+      - NOTIFICATION_PORT=${NOTIFICATION_PORT}
+
+      - DEVICEACTIVITY_HOST=${DEVICEACTIVITY_HOST}
+      - DEVICEACTIVITY_PORT=${DEVICEACTIVITY_PORT}
+
+      - BRUCE_HOST=localhost
+      - BRUCE_PORT=5018
+
+      - MAIL_ATTACHMENT_DIRECTORY=${LOCAL_FILE_STORAGE_PATH}
+        
+      - QUOTAENGINE_HOST=${QUOTAENGINE_HOST}
+      - QUOTAENGINE_PORT=${QUOTAENGINE_PORT}
+
+      - EXCEL_HOST=${EXCEL_HOST}
+      - EXCEL_PORT=${EXCEL_PORT}
+
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE=microservices_test
+      - RMQ_SUFFIX=.test
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+      - LOAD_DYNAMIC_SCHEMA=${LOAD_DYNAMIC_SCHEMA}
+
+  apilayer:
+    image: ${APILAYER_IMAGE}
+    container_name: apilayer
+    network_mode: host
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    ports:
+      - ${APILAYER_PORT}:${APILAYER_PORT}
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${APILAYER_PORT}
+      - TZ=Etc/UTC
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID=appServerLocal
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=2
+
+
+      - INFLUX_PROD_HOST=${INFLUX_PROD_HOST}
+      - INFLUX_PROD_PORT=${INFLUX_PROD_PORT}
+      - INFLUX_PROD_PROTOCOL=${INFLUX_PROD_PROTOCOL}
+      - INFLUX_PROD_USERNAME=''
+      - INFLUX_PROD_PASSWORD=''
+      - INFLUX_PROD_DATABASE=${INFLUX_PROD_DATABASE}
+      - INFLUX_PROD_TIMEPRECISION=${INFLUX_PROD_TIMEPRECISION}
+
+      - INFLUX_BACKUP_HOST=${INFLUX_BACKUP_HOST}
+      - INFLUX_BACKUP_PORT=${INFLUX_PROD_PORT}
+      - INFLUX_BACKUP_PROTOCOL=${INFLUX_BACKUP_PROTOCOL}
+      - INFLUX_BACKUP_USERNAME=''
+      - INFLUX_BACKUP_PASSWORD=''
+      - INFLUX_BACKUP_DATABASE=${INFLUX_BACKUP_DATABASE}
+      - INFLUX_BACKUP_TIMEPRECISION=${INFLUX_BACKUP_TIMEPRECISION}
+
+
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE='microservices_test'
+      - RMQ_SUFFIX='.test'
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+  fds:
+    image: ${FDS_IMAGE}
+    container_name: iodata
+    network_mode: host
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${FDS_PORT}
+      - TZ=${TIMEZONE}
+
+      -  REDIS_HOST=${REDIS_HOST}
+      -  REDIS_PORT=${REDIS_PORT}
+      -  REDIS_DB=3
+
+      - DB_URI=${DB_URI}
+
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      - APILAYER_METHOD='GET'
+
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID='dataApiLocal'
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=0
+
+      - NOTIFENGINE_HOST=${NOTIFENGINE_HOST}
+      - NOTIFENGINE_PORT=${NOTIFENGINE_PORT}
+      - DATA_SERVER_HOST=${DATA_SERVER_HOST}
+      - DATA_SERVER_PORT=${DATA_SERVER_PORT}
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE=microservices_test
+      - RMQ_SUFFIX=.test
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+      - LOAD_DYNAMIC_SCHEMA=false
+
+  rgs:
+    image: ${RGS_IMAGE}
+    container_name: rgs
+    network_mode: host
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes: 
+      - ${HOST_REPORT_PATH}:${REPORT_FOLDER}
+      - ./rgs:/home/node/.aws/credentials
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${RGS_PORT}
+      - TZ=${TIMEZONE}
+      - ./rgs:/home/node/.aws/credentials
+      - DB_URI=${DB_URI}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=3
+
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      - APILAYER_METHOD='GET'
+
+      - IODATA_HOST=${FDS_HOST}
+      - IODATA_PORT=${FDS_PORT}
+      - IODATA_METHOD='PUT'
+
+      - EXCEL_HOST=${EXCEL_HOST}
+      - EXCEL_PORT=${EXCEL_PORT}
+      - EXCEL_METHOD='PUT'
+
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID=rgs
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=0
+
+      - NOTIFENGINE_HOST=${NOTIFENGINE_HOST}
+      - NOTIFENGINE_PORT=${NOTIFENGINE_PORT}
+
+      - JWKKEYSET_KTY=${JWKKEYSET_KTY}
+      - JWKKEYSET_KID=${JWKKEYSET_KID}
+      - JWKKEYSET_USE=${JWKKEYSET_USE}
+      - JWKKEYSET_ALG=${JWKKEYSET_ALG}
+      - JWKKEYSET_K=${JWKKEYSET_K}
+
+      - REPORT_PATH=${REPORT_PATH}
+      - REPORT_FOLDER=${REPORT_FOLDER}
+      - REPORT_BUCKET=${REPORT_BUCKET}
+      - REPORT_STORE_LOCAL="true"
+
+      - LOCAL_REPORTS_HOST=${LOCAL_REPORTS_HOST}
+      - LOCAL_REPORTS_PORT=${LOCAL_REPORTS_PORT}
+      - LOCAL_REPORTS=${LOCAL_REPORTS}
+
+      - NOTIFICATION_HOST='localhost'
+      - NOTIFICATION_PORT='2500'
+
+      - QUOTAENGINE_HOST=${QUOTAENGINE_HOST}
+      - QUOTAENGINE_PORT=${QUOTAENGINE_PORT}
+
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE=microservices_test
+      - RMQ_SUFFIX=.test
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+      - MINIOURL=${MINIOURL}
+      - MINIOPROFILE=${MINIOPROFILE}
+      - MINIOREGION=${MINIOREGION}
+      - USEMINIO=${USEMINIO}
+      - MINIOSIGNATUREVERSION=${MINIOSIGNATUREVERSION}
+      - S3FORCEPATHSTYLE=${S3FORCEPATHSTYLE}
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+
+      - AWSS3PROFILE=${AWSS3PROFILE}
+      - AWSS3REGION=${AWSS3REGION}
+
+      - LOAD_DYNAMIC_SCHEMA=false
+      - EXECUTE_IO_LENS_REPORT=true
+
+  excel:
+    image: ${EXCEL_IMAGE}
+    container_name: excel
+    network_mode: host
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes: 
+      - ${HOST_REPORT_PATH}:${REPORT_FOLDER}
+      - ./rgs:/home/node/.aws/credentials
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${EXCEL_PORT}
+      - TZ=${TIMEZONE}
+
+      - DB_URI=${DB_URI}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=3
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      - APILAYER_METHOD='GET'
+      - FDS_HOST=${FDS_HOST}
+      - FDS_PORT=${FDS_PORT}
+      - FDS_METHOD='PUT'
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID='EXCEL_LOCAL'
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=0
+      - NOTIFENGINE_HOST=${NOTIFENGINE_HOST}
+      - NOTIFENGINE_PORT=${NOTIFENGINE_PORT}
+      - FACLONSERVER_HOST=${FSV_HOST}
+      - FACLONSERVER_PORT=${FSV_PORT}
+      - DATASERVICES_HOST=${DATA_SERVER_HOST}
+      - DATASERVICES_PORT=${DATA_SERVER_PORT}
+      - MINIOURL=${MINIOURL}
+      - MINIOURL2=${MINIOURL}
+      - MINIOPROFILE=${MINIOPROFILE}
+      - MINIOREGION=${MINIOREGION}
+      - USEMINIO=${USEMINIO}
+      - STORAGE_PROVIDER= 'minio'
+      - MINIOSIGNATUREVERSION=${MINIOSIGNATUREVERSION}
+      - S3FORCEPATHSTYLE=${S3FORCEPATHSTYLE}
+      - AWSS3PROFILE=${AWSS3PROFILE}
+      - AWSS3REGION=${AWSS3REGION}
+      - REPORT_PATH=${REPORT_PATH}
+      - REPORT_FOLDER=${REPORT_FOLDER}
+      - REPORT_BUCKET=${REPORT_BUCKET}
+      - REPORT_STORE_LOCAL=true
+      - LOCAL_REPORTS_HOST=${LOCAL_REPORTS_HOST}
+      - LOCAL_REPORTS_PORT=${LOCAL_REPORTS_PORT}
+      - LOCAL_REPORTS=${LOCAL_REPORTS}
+
+      - NOTIFSERVER_HOST=${NOTIFICATION_HOST}
+      - NOTIFSERVER_PORT=${NOTIFICATION_PORT}
+      - MQTT_LISTENER_TIMEOUT=1800000
+      - DSS_ITC_HOST=${DSS_ITC_HOST}
+      - DSS_ITC_PORT=${DSS_ITC_PORT}
+      - DSS_HOST=${DSS_HOST}
+      - DSS_PORT=1200
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE=microservices_test
+      - RMQ_SUFFIX=.test
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+      - LOAD_DYNAMIC_SCHEMA=false
+
+  ioscheduler:
+    image: ${IOSCHEDULER_IMAGE}
+    network_mode: host
+    container_name: ioscheduler
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    ports:
+      - ${IOSCHEDULER_PORT}:${IOSCHEDULER_PORT}
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${IOSCHEDULER_PORT}
+      - TZ=Etc/UTC
+
+      - DB_URI=${DB_URI}
+      - MONGO_USERNAME=''
+      - MONGO_PASSWORD=''
+      - LOAD_DYNAMIC_SCHEMA=false
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=3
+        
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      - APILAYER_METHOD='GET'
+        
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID='IOS_PROD'
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=2
+        
+      - NOTIFENGINE_HOST=${NOTIFENGINE_HOST}
+      - NOTIFENGINE_PORT=${NOTIFENGINE_PORT}
+        
+      - RGS_HOST=${RGS_HOST}
+      - RGS_PORT=${RGS_PORT}
+      - RGS_METHOD=PUT
+      - RGS_PATH=/api/account/report/generate
+      - RGS_PROTOCOL=http
+
+      - NOTIFICATION_HOST=${NOTIFICATION_HOST}
+      - NOTIFICATION_PORT=${NOTIFICATION_PORT}
+
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE=microservices_test
+      - RMQ_SUFFIX=.test
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+
+  quotaEngine:
+    image: ${QUOTAENGINE_IMAGE}
+    network_mode: host
+    container_name: quota
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${QUOTAENGINE_PORT}
+      - TZ=Etc/UTC
+      - DB_URI=${DB_URI}
+      
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=3
+      - IS_REDIS_CLUSTER_REQUIRED=false
+      
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      - APILAYER_METHOD='GET'
+      
+      - NOTIFENGINE_HOST=${NOTIFENGINE_HOST}
+      - NOTIFENGINE_PORT=${NOTIFENGINE_PORT}
+      
+      - AEROSPIKE_HOST=${AEROSPIKE_HOST}
+      - AEROSPIKE_PORT=${AEROSPIKE_PORT}
+      - AEROSPIKE_NAMESPACE=${AEROSPIKE_NAMESPACE}
+      - AEROSPIKE_SET=${AEROSPIKE_SET}
+      
+      - NOTIFICATION_HOST=${NOTIFICATION_HOST}
+      - NOTIFICATION_PORT=${NOTIFICATION_PORT}
+
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+
+  ionotif:
+    image: ${NOTIFENGINE_IMAGE}
+    network_mode: host
+    container_name: ionotif
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${NOTIFENGINE_PORT}
+      - TZ=Etc/UTC
+      - DB_URI=${DB_URI}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=3
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      - APILAYER_METHOD='GET'
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID='notifengineLocal12121'
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=2
+      - QUOTAENGINE_HOST=${QUOTAENGINE_HOST}
+      - QUOTAENGINE_PORT=${QUOTAENGINE_PORT}
+      - AUTH_ID=${AUTH_ID}
+      - AUTH_TOKEN=${AUTH_TOKEN}
+      - PHLO_ID=${PHLO_ID}
+      - NOTIFSERVER_HOST=${NOTIFICATION_HOST}
+      - NOTIFSERVER_PORT=${NOTIFICATION_PORT}
+      - IS_MASTER='true'
+      - TIMEZONE='Asia/Calcutta'
+      - MASTER_TRIGGERS=["type1Triggers","type2Triggers", "type3Triggers", "type4Triggers", "type9Triggers", "type10Triggers","type11Triggers", "typeACT1Triggers", "consumptionTriggerListener", "actionRange", "dataNotifSchedule", "consumptionDataNotif", "automationSchedule", "userexpiry", "powerFactorTrigger", "consumptionAlertJob" ]
+      - SLAVE_TRIGGERS=["pausePointTrigger", "type1Triggers"]
+      - BLACKLISTED_ALERT_TRIGGERS_PATTERN=["COACH"]
+      - WHITELISTED_ALERT_TRIGGERS_PATTERN=[]
+      - ALERT_TRIGGER_SUBSCRPTION_GROUP='ionotif'
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE=microservices_test
+      - RMQ_SUFFIX=.test
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+  notification:
+    image: ${NOTIFICATION_IMAGE}
+    container_name: notification
+    network_mode: host
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    volumes:
+      - ${HOST_REPORT_PATH}:${REPORT_FOLDER}
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${NOTIFICATION_PORT}
+      - TZ=Etc/UTC
+      - DB_URI=${DB_URI}
+
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID='notification'
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=2
+
+      - SMS_AUTH_KEY=${SMS_AUTH_KEY}
+      - SMS_URL=${SMS_URL}
+
+      - AUTH_ID=${AUTH_ID}
+      - AUTH_TOKEN=${AUTH_TOKEN}
+      - PHLO_ID=${PHLO_ID}
+
+      - QUOTAENGINE_HOST=${QUOTAENGINE_HOST}
+      - QUOTAENGINE_PORT=${QUOTAENGINE_PORT}
+
+      - FIREBASE_FCM_AUTH_KEY=${FIREBASE_FCM_AUTH_KEY}
+      - FIREBASE_FCM_SENDER_ID='467836394048'
+
+      - WHATSAPP_TOKEN=${WHATSAPP_TOKEN}
+      - WHATSAPP_SENDER_ID='101856402977576'
+
+      - REPORT_FOLDER=${REPORT_FOLDER}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+
+      - RMQ_CONF=${RMQ_CONF}
+      - RMQ_EXCHANGE=microservices_test
+      - RMQ_SUFFIX=.test
+      - RMQ_PREFETCH=${RMQ_PREFETCH}
+      - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+
+      - LOAD_DYNAMIC_SCHEMA=false
+      - TLS_REJECT_UNAUTHORIZED=false
+      - TIMEZONE=Asia/Kolkata
+
+  mqttserver:
+    image: ${MQTT_SERVER_IMAGE}
+    container_name: mqttserver
+    network_mode: host
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${MQTT_SERVER_PORT}
+      - TZ=Etc/UTC
+
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=3
+
+      - MQTT_HOST=${MQTT_HOST}
+      - MQTT_PORT=${MQTT_PORT}
+      - MQTT_CLIENTID='notification'
+      - MQTT_USERNAME=${MQTT_USERNAME}
+      - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - MQTT_QOS=2
+
+      - APILAYER_HOST=${APILAYER_HOST}
+      - APILAYER_PORT=${APILAYER_PORT}
+      
+  deviceactivity:
+   image: ${DEVICEACTIVITY_IMAGE}
+   container_name: deviceactivity
+   network_mode: host
+   restart: always
+   logging:
+     driver: "json-file"
+     options:
+       max-file: "5"
+       max-size: "10m"
+   ports:
+     - ${DEVICEACTIVITY_PORT}:${DEVICEACTIVITY_PORT}
+   environment:
+     - NODE_ENV=${NODE_ENV}
+     - port=${DEVICEACTIVITY_PORT}
+     - TZ=Etc/UTC
+
+     - redis_client_host=${REDIS_HOST}
+     - redis_client_port=${REDIS_PORT}
+     - redis_client_db=3
+     - DB_URI=${DB_URI2}
+
+     - MQTT_HOST=${MQTT_HOST}
+     - MQTT_PORT=${MQTT_PORT}
+     - MQTT_CLIENTID='notification'
+     - MQTT_USERNAME=${MQTT_USERNAME}
+     - MQTT_PASSWORD=${MQTT_PASSWORD}
+     - MQTT_QOS=2
+     - APILAYER_HOST=${APILAYER_HOST}
+     - APILAYER_PORT=${APILAYER_PORT}
+     - APILAYER_METHOD=GET
+     - blackListTimeout=10
+     - DATA_TOPIC=devicesIn/+/data
+
+     - dataTopic='devicesIn/+/data'
+     - whiteListAll='true'
+     - devIDs=${devIDs}
+     - redisHashSet='connection_timeout_new10'
+
+  dataservices:
+      image: ${DATASERVICES_IMAGE}
+      container_name: fds
+      network_mode: host
+      restart: always
+      logging:
+        driver: "json-file"
+        options:
+          max-file: "5"
+          max-size: "10m"
+      volumes:
+        - ${HOST_REPORT_PATH}:${REPORT_FOLDER}
+      environment:
+        - HOST=${DEVICEACTIVITY_HOST}
+        - NODE_ENV=${NODE_ENV}
+        - PORT=${DATA_SERVER_PORT}
+        - TZ=Etc/UTC
+        - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+        - RMQ_CONF=${RMQ_CONF}
+        - RMQ_EXCHANGE=microservices_test
+        - RMQ_SUFFIX=.test
+        - RMQ_PREFETCH=${RMQ_PREFETCH}
+
+        - REDIS_HOST=${REDIS_HOST}
+        - REDIS_PORT=${REDIS_PORT}
+        - REDIS_DB=3
+        
+        - DB_URI=${DB_URI2}
+   
+        - MQTT_HOST=${MQTT_HOST}
+        - MQTT_PORT=${MQTT_PORT}
+        - MQTT_CLIENTID='notification'
+        - MQTT_USERNAME=${MQTT_USERNAME}
+        - MQTT_PASSWORD=${MQTT_PASSWORD}
+        - MQTT_LISTENER_TIMEOUT=1800000
+        - MQTT_QOS=2
+
+        - ENABLE_CACHE_MIDDLEWARE=true
+
+        - CRYPTOKEY=${CRYPTOKEY}
+
+        - APILAYER_HOST=${APILAYER_HOST}
+        - APILAYER_PORT=${APILAYER_PORT}
+        - REPORT_FOLDER=${REPORT_FOLDER}
+
+  ems:
+      image: ${EMS_IMAGE}
+      container_name: ems
+      network_mode: host
+      restart: always
+      logging:
+        driver: "json-file"
+        options:
+          max-file: "5"
+          max-size: "10m"
+      ports:
+        - ${EMS_SERVER_PORT}:${EMS_SERVER_PORT}
+      environment:
+        - NODE_ENV=${NODE_ENV}
+        - PORT=${EMS_SERVER_PORT}
+        - TZ=Etc/UTC
+        - FORIP=50
+        - FORIPANDUSER=7
+        - LOGEXPIRATION=20m
+
+        - REDIS_HOST=${REDIS_HOST}
+        - REDIS_PORT=${REDIS_PORT}
+        - REDIS_DB=8
+        
+        - DB_URI=${DB_URI2}
+   
+        - MQTT_HOST=${MQTT_HOST}
+        - MQTT_PORT=${MQTT_PORT}
+        - MQTT_CLIENTID='ems'
+        - MQTT_USERNAME=${MQTT_USERNAME}
+        - MQTT_PASSWORD=${MQTT_PASSWORD}
+        - MQTT_QOS=2
+
+        - APILAYER_HOST=${APILAYER_HOST}
+        - APILAYER_PORT=${APILAYER_PORT}
+
+        - NOTIFENGINE_HOST=${NOTIFENGINE_HOST}
+        - NOTIFENGINE_PORT=${NOTIFENGINE_PORT}
+
+        - NOTIFICATION_HOST=${NOTIFICATION_HOST}
+        - NOTIFICATION_PORT=${NOTIFICATION_PORT}
+
+  thirdpartyserver:
+        image: ${THIRD_PARTY_SERVER_IMAGE}
+        container_name: thirdpartyserver
+        network_mode: host
+        restart: always
+        logging:
+          driver: "json-file"
+          options:
+            max-file: "5"
+            max-size: "10m"
+        environment:
+          - NODE_ENV=${NODE_ENV}
+          - PORT=${THIRD_PARTY_SERVER_PORT}
+          - TZ=Etc/UTC
+          - IS_DOCKER_CONTAINER=${IS_DOCKER_CONTAINER}
+          - REDIS_HOST=${REDIS_HOST}
+          - REDIS_PORT=${REDIS_PORT}
+          - REDIS_DB=3
+          - BACKEND_HOST=localhost
+          - BACKEND_PORT=4000
+          - DB_URI=${DB_URI}
+    
+          - APILAYER_HOST=${APILAYER_HOST}
+          - APILAYER_PORT=${APILAYER_PORT}
+
+  rabbitmq-1:
+      image: ${RABBITMQ_IMAGE}
+      container_name: "rmq"
+      network_mode: bridge
+      hostname: rabbitmq-1
+      restart: always
+      environment:
+          - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+          - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      ports:
+          - '5672:5672'
+          - '15672:15672'
+      volumes:
+          - /config/:/config/
+          - /config/:/var/lib/rabbitmq/ad6f293e1654
+
+
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    restart: always
+    ports:
+      - ${MINIO_HOST_API_PORT}:${MINIO_API_PORT}
+      - ${MINIO_HOST_CONSOLE_PORT}:${MINIO_CONSOLE_PORT}
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIOURL=${MINIOURL}
+      - MINIOREGION=${MINIOREGION}
+      - MINIO_SETUP_SCRIPT_PATH=${MINIO_SETUP_SCRIPT_PATH}
+    volumes:
+      - ${MINIO_HOST_DATA_PATH}:${MINIO_DATA_PATH}
+      - ${MINIO_HOST_SETUP_SCRIPT_PATH}:${MINIO_SETUP_SCRIPT_PATH}
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "
+      minio server ${MINIO_DATA_PATH} --console-address :${MINIO_CONSOLE_PORT} &
+      until curl -s ${MINIOURL}/minio/health/ready > /dev/null; do
+        echo '⏳ Waiting for MinIO to be ready...';
+        sleep 2;
+      done;
+      echo '✅ MinIO is live. Running init script...';
+      chmod +x ${MINIO_SETUP_SCRIPT_PATH};
+      ${MINIO_SETUP_SCRIPT_PATH};
+      wait
+      "
+
+  mfa-server:
+    image: utkarshns/mfa-server:0.0.6
+    container_name: mfa
+    network_mode: host
+    restart: always
+    environment:
+      - NODE_ENV=production
+
+      - PORT=3069
+      - HOST=localhost
+
+      - APP_NAME=MFA Service
+
+      - RATE_LIMIT_MAX=5
+      - RATE_LIMIT_WINDOW_MS=900000
+
+      - DB_URI=${DB_URI}
+      - MONGODB_MAX_POOL_SIZE=10
+
+      - REDIS_HOST=localhost
+      - REDIS_PORT=6379
+      - REDIS_DB=1
+
+      - RMQ_EXCHANGE=microservices
+      - RMQ_SUFFIX=
+      - RMQ_PREFETCH=10
+
+      - LOG_LEVEL=info
+      - LOG_ENV_CONFIG=true
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+
+
+
+
+
+  bruce-data-layer:
+    image: ${BRUCE_DATA_LAYER_IMAGE}
+    container_name: bruce-data-layer
+    restart: always
+    network_mode: host
+    extra_hosts:
+      - "qe.iosense.io:127.0.0.1"
+    volumes:
+      - ./bdl:/home/node/.aws/credentials:ro
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      TZ: ${TIMEZONE:-Etc/UTC}
+      IS_DOCKER_CONTAINER: "true"
+      RMQ_CONF: ${RMQ_CONF}
+      RMQ_EXCHANGE: microservices_test
+      RMQ_SUFFIX: .test
+      RMQ_PREFETCH: ${RMQ_PREFETCH}
+      HOST: ${BRUCE_DATA_LAYER_HOST}
+      PORT: ${BRUCE_DATA_LAYER_PORT}
+      DB_URI: ${BRUCE_DB_URI}
+      PROD_DB_URI: ${DB_URI}
+      PROD_MONGO_USERNAME: ""
+      PROD_MONGO_PASSWORD: ""
+      USEMINIO: "true"
+      MINIOURL: ${MINIOURL}
+      MINIOPROFILE: ${MINIOPROFILE}
+      MINIOREGION: ${MINIOREGION}
+      MINIOSIGNATUREVERSION: ${MINIOSIGNATUREVERSION}
+      S3FORCEPATHSTYLE: ${S3FORCEPATHSTYLE}
+      AWSS3PROFILE: ${AWSS3PROFILE}
+      AWSS3REGION: ${AWSS3REGION}
+      BACKENDASSETSBUCKETNAME: ${BACKENDASSETSBUCKETNAME}
+      DEVOPSBUCKETNAME: ${DEVOPSBUCKETNAME}
+      BRUCEDB_BUCKET_NAME: ${BRUCEDB_BUCKET_NAME}
+      BRUCEDB_S3_PROFILE: ${BRUCEDB_S3_PROFILE}
+      ENABLE_QDRANT: ${ENABLE_QDRANT:-false}
+      QDRANT_HOST: ${QDRANT_HOST:-localhost}
+      QDRANT_PORT: ${QDRANT_PORT:-6333}
+      ENABLE_ARANGO: ${ENABLE_ARANGO:-false}
+      ARANGO_URL: ${ARANGO_URL:-}
+      ARANGO_DATABASE: ${ARANGO_DATABASE:-}
+      ARANGO_USERNAME: ${ARANGO_USERNAME:-}
+      ARANGO_PASSWORD: ${ARANGO_PASSWORD:-}
+      LOAD_DYNAMIC_SCHEMA: ${LOAD_DYNAMIC_SCHEMA}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:${BRUCE_DATA_LAYER_PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-file: "5"
+        max-size: "10m"

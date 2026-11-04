@@ -1,0 +1,12 @@
+.env*
+*.env
+fsv
+admin
+bdl
+creds.js
+data/
+*.zip
+*.log
+*.pem
+*.key
+*.bak*
